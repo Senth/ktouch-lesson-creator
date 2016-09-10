@@ -11,3 +11,6 @@ class Paragraph:
 
     def getWordCount(self):
         return findall(r'\w+', self._text);
+
+    def getCharCount(self):
+        return len(self._text)

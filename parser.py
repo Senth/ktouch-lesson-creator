@@ -4,8 +4,8 @@ from book import Chapter
 class Parser:
     """Parses a book and converts it into chapters"""
     sentenceEndCharsPattern = '.*[\.\?][\'\"]?$'
-    chapterStartsWith = 'Chapter.*'
-    paragraphStartPattern = ' .*'
+    chapterStartsWith = 'Chapter(.*)'
+    paragraphStartPattern = '\s.*'
 
     def __init__(self, filename, ignore=None):
         self._ignore = ignore
@@ -19,6 +19,7 @@ class Parser:
         with open(self._filename) as book_file:
             for line in book_file:
                 self._parseLine(line)
+        self._endChapter()
 
     def _parseLine(self, line):
         # Remove newline, ignore pattern, and trailing characters
@@ -33,12 +34,13 @@ class Parser:
                 self._paragraphMightEnd = True
 
             # New chapter?
-            if re.match(Parser.chapterStartsWith):
+            chapterMatch = re.match(Parser.chapterStartsWith, line)
+            if chapterMatch:
                 self._endChapter()
-                self._startChapter(line)
+                self._startChapter(chapterMatch.group(1).strip())
 
             # New paragraph?
-            if self._paragraphMightEnd and re.match(Parser.paragraphStartPattern):
+            if self._paragraphMightEnd and re.match(Parser.paragraphStartPattern, line):
                 self._endParagraph()
 
             # Add paragraph text
@@ -58,6 +60,7 @@ class Parser:
 
     def _endChapter(self):
         if self._chapter:
+            self._endParagraph()
             self._chapters.append(self._chapter)
             self._chapter = None
 
