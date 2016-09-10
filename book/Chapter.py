@@ -21,5 +21,8 @@ class Chapter:
             count += paragraph.getCharCount()
         return count
 
+    def getName(self):
+        return self._name
+
     def getParagraphs(self):
         return self._paragraphs

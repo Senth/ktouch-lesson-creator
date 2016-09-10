@@ -1,20 +1,20 @@
 from uuid import uuid4
+import textwrap
 
 class Lesson:
     """A section of a chapter that is created as a lesson"""
-    profile_id = 1
-    keyboard_layout_name = 'us'
-    book_name = 'book'
+    lineLengthMax = 60
 
-    def __init__(self, chapter_name, section_count):
+    def __init__(self, bookName, chapterName, sectionCount):
         # Generate UUID
         self._id = str(uuid4())
+        self._text = ''
 
         # Create Lesson Name
-        self._name = Lesson.book_name + ' - ' + chapter_name + ' ' + str(section_count)
+        self._name = bookName + ' - ' + chapterName + ' ' + str(sectionCount)
 
     def addParagraph(self, paragraph):
-        if self._text:
+        if len(self._text) > 0:
             self._text += ' '
 
         self._text += paragraph.getText()
@@ -28,12 +28,20 @@ class Lesson:
             return len(self._text)
         else:
             return 0
-
+    
     def getId(self):
         return self._id
 
     def getText(self):
         return self._text
+
+    def getTextWrapped(self):
+        textLines = textwrap.wrap(self._text, Lesson.lineLengthMax)
+        wrappedText = ''
+        for textLine in textLines:
+            wrappedText += textLine + '\n'
+        return wrappedText[:-1]
+
 
     def getName(self):
         return self._name
