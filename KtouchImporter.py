@@ -34,5 +34,6 @@ class KtouchImporter:
         shutil.copy2(self._dbLocation, backupLocation)
 
     def _importLesson(self, lesson):
+        logging.debug('Import Lesson: ' + lesson.getName() + '\n\n' + lesson.getTextWrapped())
         values = (lesson.getId(), self._profileId, lesson.getName(), lesson.getTextWrapped(), self._keyboardLayoutName)
         self._cursor.execute("INSERT INTO custom_lessons (id, profile_id, title, text, keyboard_layout_name) VALUES (?, ?, ?, ?, ?)", values)

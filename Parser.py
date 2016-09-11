@@ -49,11 +49,12 @@ class Parser:
                 self._startChapter(chapterMatch.group(1).strip())
             # Add paragraph text
             else:
-                if len(self._paragraph) > 0:
+                # Add space between paragraphs
+                if len(self._paragraph) > 0 and not self._paragraph.endswith('-'):
                     self._paragraph += ' '
 
-                # Add to paragraph if it w
-                self._paragraph += line.lstrip()
+                # Add to paragraph, double spaces are converted to single space
+                self._paragraph += re.sub('\s+', ' ', line.strip()).strip()
 
         # Paragraph has ended (after line break)
         elif self._paragraphMightEnd:
